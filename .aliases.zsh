@@ -53,3 +53,7 @@ cd() {
 take() {
   mkdir -p $@ && cd ${@:$#}
 }
+
+yq() {
+  docker run --rm -i -v "${PWD}":/workdir mikefarah/yq "$@"
+}
