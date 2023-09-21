@@ -1,9 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your dotfiles.
-export DOTFILES=$HOME/.dotfiles
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -16,7 +13,7 @@ autoload -Uz compinit && compinit
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="terminalparty"
+ZSH_THEME="devcontainers"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -90,11 +87,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nano'
-else
-  export EDITOR='code'
-fi
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='nano'
+# else
+#   export EDITOR='code'
+# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -105,17 +102,10 @@ fi
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-alias zshconfig="code ~/.zshrc"
-alias ohmyzsh="code ~/.oh-my-zsh"
-alias tfi="terraform init -backend-config access_key=$(az storage account keys list -n sebterraformprodsa -g seb-terraform-prod-wus2-rg --query "[0].value" -o tsv)"
-
-# Start Docker daemon automatically when logging in if not running.
-if service docker status 2>&1 | grep -q "is not running"; then
-    wsl.exe -d "${WSL_DISTRO_NAME}" -u root -e /usr/sbin/service docker start >/dev/null 2>&1
-fi
-
-#added for tfswitch
-PATH=$PATH:$HOME/.bin
+# alias zshconfig="code ~/.zshrc"
+# alias ohmyzsh="code ~/.oh-my-zsh"
 
 [ -f $HOME/.aliases.zsh ] && source $HOME/.aliases.zsh
-[ -f $HOME/.tfswitch.toml ] && source $HOME/.dots/source/tfswitch_path.zsh
+
+DISABLE_AUTO_UPDATE=true
+DISABLE_UPDATE_PROMPT=true

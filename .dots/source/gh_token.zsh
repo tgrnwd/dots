@@ -1,1 +1,0 @@
-export GITHUB_TOKEN=$(cat ~/.config/gh/hosts.yml | grep "oauth_token" | awk -F ': ' '{print $2}')
