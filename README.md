@@ -1,7 +1,6 @@
 # dots
 
 ## Install
-----------
 
 ### For GitHub Codespaces
 
