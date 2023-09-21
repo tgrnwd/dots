@@ -1,5 +1,7 @@
 # dots
 
+Just some simple dotfiles to make life a little easier.
+
 ## Install
 
 ### For GitHub Codespaces
