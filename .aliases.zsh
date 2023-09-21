@@ -41,7 +41,7 @@ alias wip="commit wip"
 
 
 
-cd(){
+cd() {
   builtin cd "$@";
   cdir=$PWD;
   if [ -e "$cdir/versions.tf" ]; then
@@ -55,6 +55,6 @@ take() {
 }
 
 # Cd to Git repository root folder
-gr() {
-  cd "./$(git rev-parse --show-cdup 2>/dev/null)" 2>/dev/null
-}
+# gr() {
+#   cd "./$(git rev-parse --show-cdup 2>/dev/null)" 2>/dev/null
+# }
