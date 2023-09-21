@@ -1,6 +1,6 @@
 # Shortcuts
 alias reloadshell="source $HOME/.zshrc"
-# alias c="clear"
+alias c="clear"
 
 # Shortcuts
 alias ls="ls --color"
@@ -44,7 +44,7 @@ alias wip="commit wip"
 cd() {
   builtin cd "$@";
   cdir=$PWD;
-  if [ -e "$cdir/versions.tf" ]; then
+  if [ -e "$cdir/versions.tf" && command -v tfswitch]; then
     tfswitch
   fi
 }
@@ -53,8 +53,3 @@ cd() {
 take() {
   mkdir -p $@ && cd ${@:$#}
 }
-
-# Cd to Git repository root folder
-# gr() {
-#   cd "./$(git rev-parse --show-cdup 2>/dev/null)" 2>/dev/null
-# }
