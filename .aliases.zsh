@@ -39,16 +39,6 @@ alias stash="git stash -u"
 alias unstage="git restore --staged ."
 alias wip="commit wip"
 
-
-
-cd() {
-  builtin cd "$@";
-  cdir=$PWD;
-  if [ -e "$cdir/versions.tf" && command -v tfswitch]; then
-    tfswitch
-  fi
-}
-
 # Make a directory and cd to it
 take() {
   mkdir -p $@ && cd ${@:$#}
