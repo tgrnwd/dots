@@ -10,6 +10,7 @@ link_zsh() {
   mv "$HOME"/.zshrc "$HOME"/.zshrc.old
   ln -s "$script_dir"/.zshrc "$HOME"/.zshrc
   ln -s "$script_dir"/.aliases.zsh "$HOME"/.aliases.zsh
+  ln -s "$script_dir"/.paths.zsh "$HOME"/.paths.zsh
   ln -s "$script_dir"/random-emoji.zsh-theme   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/random-emoji.zsh-theme
  }
 

@@ -106,6 +106,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="code ~/.oh-my-zsh"
 
 [ -f $HOME/.aliases.zsh ] && source $HOME/.aliases.zsh
+[ -f $HOME/.paths.zsh ] && source $HOME/.paths.zsh
 
 DISABLE_AUTO_UPDATE=true
 DISABLE_UPDATE_PROMPT=false
