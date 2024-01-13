@@ -11,6 +11,8 @@ link_zsh() {
   ln -s "$script_dir"/.zshrc "$HOME"/.zshrc
   ln -s "$script_dir"/.aliases.zsh "$HOME"/.aliases.zsh
   ln -s "$script_dir"/.paths.zsh "$HOME"/.paths.zsh
+  ln -s "$script_dir"/.exports.zsh "$HOME"/.exports.zsh
+  ln -s "$script_dir"/.npmrc "$HOME"/.npmrc
   ln -s "$script_dir"/random-emoji.zsh-theme   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/random-emoji.zsh-theme
  }
 
