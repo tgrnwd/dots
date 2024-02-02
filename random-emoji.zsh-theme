@@ -17,4 +17,4 @@ RPROMPT='%c'
 RPROMPT='%{$fg_bold[colour255]%}$(prompt_status)%c$(git_prompt_info)'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" : "
-ZSH_THEME_GIT_PROMPT_SUFFIX=" "
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
