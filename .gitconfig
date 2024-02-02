@@ -67,35 +67,12 @@
 	# Show branch names with git log
 	decorate = short
 
-# Kaleidoscope
-# [difftool "Kaleidoscope"]
-# 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-# [diff]
-# 	tool = Kaleidoscope
-# [difftool]
-# 	prompt = false
-# [mergetool "Kaleidoscope"]
-# 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-# 	trustExitCode = true
-# [mergetool]
-# 	prompt = false
-# [merge]
-# 	tool = Kaleidoscope
-
 # https://github.com/so-fancy/diff-so-fancy
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
-
-# [user]
-# 	name = Artem Sapegin
-# 	email = artem@sapegin.ru
-
-# Include local settings
-# [include]
-# 	path = .gitlocal
 
 # Some random stuff that always appers at the end of the config file
 [filter "media"]

@@ -1,17 +1,10 @@
 # Shortcuts
-alias reloadshell="source $HOME/.zshrc"
+alias rasdf="source $HOME/.zshrc"
 alias c="clear"
 
 # Shortcuts
 alias ls="ls --color"
-# alias -- +x="chmod +x"
-# alias o="open"
-# alias oo="open ."
-# alias e="$EDITOR"
-# alias cc="code ."
-
-# Bat: https://github.com/sharkdp/bat
-command -v bat >/dev/null 2>&1 && alias cat="bat --style=numbers,changes"
+alias cc="code ."
 
 # Download file and save it with filename of remote file
 alias get="curl -O -L"
@@ -19,7 +12,7 @@ alias get="curl -O -L"
 
 # Directories
 alias dotfiles="cd $DOTFILES"
-alias dev="cd $HOME/Code"
+alias dev="cd $HOME/codes"
 
 # Git
 alias gst="git status"

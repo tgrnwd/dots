@@ -1,6 +1,4 @@
-if ! type gh > /dev/null; then
-  # echo "gh cli not installed"
-else
+if type gh > /dev/null; then
   if [ -z $GITHUB_TOKEN ]; then
     export GITHUB_TOKEN=$(gh auth token)
   fi
