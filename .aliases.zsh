@@ -11,8 +11,24 @@ alias get="curl -O -L"
 
 # Curl GitHub API with token e.g. ghapi user
 ghapi () {
-    curl -L -i -H "Accept: application/vnd.github+json" -H "Authorization: token $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/"$1"
+    if ! [ -z $GITHUB_TOKEN ]; then
+        curl -L -s -H "Accept: application/vnd.github+json" -H "Authorization: token $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/"$1"
+    else
+        echo "GITHUB_TOKEN is not set"
+    fi
 }
+
+# Add GitHub Nuget Package Source; prompts for GitHub Org
+ghnuget () {
+    if ! [ -z $GITHUB_TOKEN ]; then
+        printf >&2 '%s ' 'GitHub Org:'
+        read org
+        dotnet nuget add source https://nuget.pkg.github.com/$org/index.json -n $org-github-nuget -u $(ghapi user | jq -r '.login') -p $GITHUB_TOKEN --store-password-in-clear-text
+    else
+        echo "GITHUB_TOKEN is not set"
+    fi
+}
+
 
 # Directories
 alias dotfiles="cd $DOTFILES"
