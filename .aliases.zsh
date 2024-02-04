@@ -18,22 +18,6 @@ ghapi () {
     fi
 }
 
-# Add GitHub Nuget Package Source; prompts for GitHub Org
-ghnuget () {
-    if ! [ -z $GITHUB_TOKEN ]; then
-        printf >&2 '%s ' 'GitHub Org:'
-        read org
-        if ! [[ $(dotnet nuget list source --format short | grep $org) ]]; then
-            dotnet nuget add source https://nuget.pkg.github.com/$org/index.json -n $org-github-nuget -u $(ghapi user | jq -r '.login') -p $GITHUB_TOKEN --store-password-in-clear-text
-        else
-            echo "GitHub Nuget Source already exists"
-        fi
-    else
-        echo "GITHUB_TOKEN is not set"
-    fi
-}
-
-
 # Directories
 alias dotfiles="cd $DOTFILES"
 alias dev="cd $HOME/codes"
