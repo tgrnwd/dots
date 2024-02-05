@@ -1,5 +1,5 @@
 # Shortcuts
-alias rasdf="source $HOME/.zshrc"
+alias rasdf="omz reload"
 alias c="clear"
 
 # Shortcuts
@@ -16,6 +16,10 @@ ghapi () {
     else
         echo "GITHUB_TOKEN is not set"
     fi
+}
+
+dotfilesinstall () {
+    $DOTFILES_PATH/install.sh "$@"
 }
 
 # Directories
