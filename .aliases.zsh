@@ -10,6 +10,7 @@ alias cc="code ."
 alias get="curl -O -L"
 
 dotfilesinstall () {
+    DOTFILES_PATH=$(dirname "$(readlink -f "$HOME/.zshrc")")
     $DOTFILES_PATH/install.sh "$@"
 }
 
