@@ -81,13 +81,18 @@ ghnuget () {
     ! [ -z $GITHUB_TOKEN ] && {
       echo -e "** .NET sdk found, GITHUB_TOKEN found. Adding GitHub Nuget Package Source..."
 
-      echo -e "\nChoose an org to authenticate a GitHub Nuget Package source.\n"
-      PS3="Enter a number: "
-      select org in $(echo "$(gh org list)$(echo ' Skip')")
-      do 
-        
-        break
-      done
+      [[ $USER == "codespace" ]] && {
+        echo "Running in codespace, adding repo owner as GitHub Nuget Package Source..."
+        org=$(gh repo view --json owner | jq -r '.owner.login')
+      } || {
+        echo -e "\nChoose an org to authenticate a GitHub Nuget Package source.\n"
+        PS3="Enter a number: "
+        select org in $(echo "$(gh org list)$(echo ' Skip')")
+        do 
+          
+          break
+        done
+      }
 
       [[ $org == "Skip" ]] && {
         echo "Skipping GitHub Nuget Package Source..."
