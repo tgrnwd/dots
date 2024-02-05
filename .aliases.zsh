@@ -9,15 +9,6 @@ alias cc="code ."
 # Download file and save it with filename of remote file
 alias get="curl -O -L"
 
-# Curl GitHub API with token e.g. ghapi user
-ghapi () {
-    if ! [ -z $GITHUB_TOKEN ]; then
-        curl -L -s -H "Accept: application/vnd.github+json" -H "Authorization: token $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/"$1"
-    else
-        echo "GITHUB_TOKEN is not set"
-    fi
-}
-
 dotfilesinstall () {
     $DOTFILES_PATH/install.sh "$@"
 }
