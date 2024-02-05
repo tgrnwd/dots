@@ -81,9 +81,11 @@ ghnuget () {
     ! [ -z $GITHUB_TOKEN ] && {
       echo -e "** .NET sdk found, GITHUB_TOKEN found. Adding GitHub Nuget Package Source..."
 
+      dotnet_version=$(dotnet --version | cut -d'.' -f1)
+
       [[ $USER == "codespace" ]] && {
         echo "Running in codespace, adding repo owner as GitHub Nuget Package Source..."
-        org=$(gh repo view --json owner | jq -r '.owner.login')
+        org=$(gh cs view --json billableOwner | jq -r '.billableOwner.login')
       } || {
         echo -e "\nChoose an org to authenticate a GitHub Nuget Package source.\n"
         PS3="Enter a number: "
@@ -100,7 +102,7 @@ ghnuget () {
         if ! [[ $(dotnet nuget list source --format short | grep $org) ]]; then
             {
               echo "Adding GitHub Nuget Source for $org"
-              dotnet nuget update source https://nuget.pkg.github.com/$org/index.json -n $org-github-nuget -u $(gh api user | jq -r '.login') -p $GITHUB_TOKEN --store-password-in-clear-text
+              dotnet nuget add source https://nuget.pkg.github.com/$org/index.json -n $org-github-nuget -u $(gh api user | jq -r '.login') -p $GITHUB_TOKEN --store-password-in-clear-text
             } || {
               echo "problem adding GitHub Nuget Source for $org"
             }
