@@ -5,3 +5,4 @@ pathadd() {
 }
 
 pathadd $HOME/.local/bin
+pathadd $HOME/.dotnet/tools

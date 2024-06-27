@@ -9,7 +9,7 @@
 
 [core]
 	# editor = micro
-	pager = git-pager
+	# pager = git-pager
 	autocrlf = false
 	safecrlf = false
 	mergeoptions = --no-edit
