@@ -19,13 +19,14 @@ The default codespace comes with `Zsh` and `oh-my-zsh`, as well as `gh` (authent
 3. Install `jq` - `sudo apt install -y jq`
 4. [Install `gh`](https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-raspberry-pi-os-apt) and login
 
-#### Optional stuff I (often) use
+### Tools
 
-5. [Install `az`](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt#option-1-install-with-one-command) and login
-6. [Install `tfswitch`](https://tfswitch.warrensbox.com/Troubleshoot/)
+- [`az`](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt#option-1-install-with-one-command) and login
+- [`aws`](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [`tfswitch`](https://tfswitch.warrensbox.com/Troubleshoot/)
     - in WSL, installing locally is preferred
     - e.g. `./install.sh -b $HOME/.local/bin`
-
-### For Azure Cloud Shell
-
-TBD
+- [`uv`](https://docs.astral.sh/uv/#installation)
+- [`g`](https://github.com/stefanmaric/g)
+- [`nvm`](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
+- [`sdkman`](https://sdkman.io/)
