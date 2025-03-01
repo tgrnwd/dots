@@ -21,7 +21,7 @@ The default codespace comes with `Zsh` and `oh-my-zsh`, as well as `gh` (authent
 
 ### Tools
 
-- [`az`](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt#option-1-install-with-one-command) and login
+- [`az`](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt#option-1-install-with-one-command)
 - [`aws`](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [`tfswitch`](https://tfswitch.warrensbox.com/Troubleshoot/)
     - in WSL, installing locally is preferred
