@@ -35,3 +35,13 @@ alias resolve="git add . && git commit --no-edit"
 alias stash="git stash -u"
 alias unstage="git restore --staged ."
 alias wip="commit wip"
+
+#yq
+yq() {
+  docker run --rm -i -v "${PWD}":/workdir mikefarah/yq "$@"
+}
+
+#jq
+jq() {
+  docker run -i --rm -v "$PWD:$PWD" -w "$PWD" ghcr.io/jqlang/jq:latest "$@"
+}

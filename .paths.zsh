@@ -6,3 +6,6 @@ pathadd() {
 
 pathadd $HOME/.local/bin
 pathadd $HOME/.dotnet/tools
+
+#rancher desktop
+export PATH="$HOME/.rd/bin:$PATH"

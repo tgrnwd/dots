@@ -16,8 +16,20 @@ The default codespace comes with `Zsh` and `oh-my-zsh`, as well as `gh` (authent
     - `sudo apt install zsh`
     - `chsh -s $(which zsh)`
 2. [Install `oh-my-zsh`](https://ohmyz.sh/#install)
-3. Install `jq` - `sudo apt install -y jq`
-4. [Install `gh`](https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-raspberry-pi-os-apt) and login
+3. [Install `gh`](https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-raspberry-pi-os-apt) and login
+4. Get a Docker
+    - Rancher Desktop
+    - or something else
+
+### For Mac
+
+Notes: `jq` already on system, Docker alias will override. 
+
+1. [Install `oh-my-zsh`](https://ohmyz.sh/#install)
+2. [Install `gh`](`brew install gh`) and login
+3. Get a Docker
+    - Rancher Desktop
+    - or something else
 
 ### Tools
 
@@ -30,3 +42,4 @@ The default codespace comes with `Zsh` and `oh-my-zsh`, as well as `gh` (authent
 - [`g`](https://github.com/stefanmaric/g)
 - [`nvm`](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
 - [`sdkman`](https://sdkman.io/)
+- [`dotnet`](https://learn.microsoft.com/en-us/dotnet/core/install/)
