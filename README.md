@@ -25,11 +25,38 @@ The default codespace comes with `Zsh` and `oh-my-zsh`, as well as `gh` (authent
 
 Notes: `jq` already on system, Docker alias will override. 
 
-1. [Install `oh-my-zsh`](https://ohmyz.sh/#install)
-2. [Install `gh`](`brew install gh`) and login
-3. Get a Docker
-    - Rancher Desktop
-    - or something else
+1. [Install `brew`](https://brew.sh/)
+2. [Install `oh-my-zsh`](https://ohmyz.sh/#install)
+3. `brew install gh` and login
+4. `brew install starship`
+4. `brew install fnm`
+`brew install bat`
+5. `brew install tfswitch`
+5. [Install Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation#installing-rancher-desktop-on-macos
+
+#### Brew
+
+##### Required
+
+fnm - node
+gh
+starship
+tfswitch
+
+##### Optional
+
+1password
+1password-cli
+caffeine
+cursor
+ghostty
+powershell
+ungoogled-chromium
+g - go
+
+azure-cli
+bat
+terraform-docs
 
 ### Tools
 
