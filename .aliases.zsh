@@ -1,5 +1,6 @@
 alias c="clear"
 alias ls="ls --color"
+alias grep='grep --color=auto'
 alias get="curl -O -L" # Download file and save it with filename of remote file
 alias dotfiles="cd $DOTFILES"
 alias dev="cd $HOME/codes"

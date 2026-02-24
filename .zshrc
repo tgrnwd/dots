@@ -56,7 +56,9 @@ type bat &>/dev/null && alias cat='bat --paging=never'
 # ── Starship prompt ─────────────────────────────────────────────────────────
 eval "$(starship init zsh)"
 
-eval "$(mise activate bash)"
+# ── Mise package manager ────────────────────────────────────────────────────
+eval "$(mise activate zsh)"
+
 # ── Source config files ─────────────────────────────────────────────────────
 source $DOTFILES_PATH/.aliases.zsh
 source $DOTFILES_PATH/.paths.zsh
