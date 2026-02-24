@@ -1,0 +1,11 @@
+command_timeout = 2000
+
+[azure]
+disabled = false
+format = '[$symbol ($subscription)]($style) '
+symbol = ''
+style = 'blue bold'
+
+[terraform]
+format = '[$symbol $version:$workspace]($style) '
+symbol = ''

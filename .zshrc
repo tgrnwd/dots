@@ -1,113 +1,64 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# ── Plugin bootstrap ────────────────────────────────────────────────────────
+export ZSH_PLUGIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
+export DOTFILES_PATH="$HOME/dots"
 
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+_ensure_cloned() {
+  [[ -d "$ZSH_PLUGIN_DIR/$2" ]] || git clone --depth=1 "https://github.com/$1.git" "$ZSH_PLUGIN_DIR/$2"
+}
 
-# Enable completions
-autoload -Uz compinit && compinit
-# autoload -U +X bashcompinit && bashcompinit
-# source /etc/bash_completion.d/azure-cli
+_ensure_cloned zsh-users/zsh-autosuggestions    zsh-autosuggestions
+_ensure_cloned zsh-users/zsh-syntax-highlighting zsh-syntax-highlighting
+_ensure_cloned zsh-users/zsh-completions        zsh-completions
+unfunction _ensure_cloned
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="random-emoji"
+# homebrew
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+# ── Completion system ───────────────────────────────────────────────────────
+# Add plugin completions and brew completions to fpath BEFORE compinit
+fpath=("$ZSH_PLUGIN_DIR/zsh-completions/src" $fpath)
+if type brew &>/dev/null; then
+  fpath=("$(brew --prefix)/share/zsh/site-functions" $fpath)
+fi
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit -d "${ZDOTDIR:-$HOME}/.zcompdump"
+else
+  compinit -C -d "${ZDOTDIR:-$HOME}/.zcompdump"
+fi
+autoload -U +X bashcompinit && bashcompinit
 
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+# Tool completions (after compinit)
+type terraform &>/dev/null && complete -o nospace -C "$(which terraform)" terraform
+type fnm &>/dev/null && eval "$(fnm completions --shell zsh)"
 
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+# ── Plugins ─────────────────────────────────────────────────────────────────
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+source "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
+# ── History ─────────────────────────────────────────────────────────────────
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_REDUCE_BLANKS HIST_IGNORE_SPACE
 
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+# ── Convenience (replaces OMZ features) ─────────────────────────────────────
+# take: mkdir + cd in one command
+take() { mkdir -p "$1" && cd "$1" }
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+# bat alias (replaces zsh-bat plugin)
+type bat &>/dev/null && alias cat='bat --paging=never'
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# ── Starship prompt ─────────────────────────────────────────────────────────
+eval "$(starship init zsh)"
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+eval "$(mise activate bash)"
+# ── Source config files ─────────────────────────────────────────────────────
+source $DOTFILES_PATH/.aliases.zsh
+source $DOTFILES_PATH/.paths.zsh
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git gh nvm terraform zsh-autosuggestions zsh-syntax-highlighting)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='nano'
-# else
-#   export EDITOR='code'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="code ~/.zshrc"
-# alias ohmyzsh="code ~/.oh-my-zsh"
-
-[ -f $HOME/.aliases.zsh ] && source $HOME/.aliases.zsh
-[ -f $HOME/.paths.zsh ] && source $HOME/.paths.zsh
-[ -f $HOME/.exports.zsh ] && source $HOME/.exports.zsh
-
-DISABLE_AUTO_UPDATE=true
-DISABLE_UPDATE_PROMPT=false
+[[ -f $HOME/.zsh.local ]] && source $HOME/.zsh.local
