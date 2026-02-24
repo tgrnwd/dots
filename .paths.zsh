@@ -10,3 +10,4 @@ pathadd $HOME/.rd/bin # rancher desktop
 pathadd $HOME/.git-ai/bin # git-ai
 
 export GOROOT="$HOME/.go"
+[ ! -d "$GOROOT" ] && mkdir -p "$GOROOT"
