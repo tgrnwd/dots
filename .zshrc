@@ -1,6 +1,7 @@
 # ── Plugin bootstrap ────────────────────────────────────────────────────────
 export ZSH_PLUGIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
-export DOTFILES_PATH="$HOME/dots"
+# Resolve the directory containing this .zshrc, following symlinks
+export DOTFILES_PATH="$(dirname "$(realpath "${(%):-%x}")")"
 
 _ensure_cloned() {
   [[ -d "$ZSH_PLUGIN_DIR/$2" ]] || git clone --depth=1 "https://github.com/$1.git" "$ZSH_PLUGIN_DIR/$2"
