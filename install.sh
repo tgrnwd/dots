@@ -5,9 +5,6 @@ while getopts "gnx" opt; do
     g)
       GITCONFIG=true
       ;;
-    n)
-      NUGET=true
-      ;;
     x)
       REMOVE_OLD=true
       ;;
@@ -29,31 +26,12 @@ linkit () {
   ln -sf "$script_dir"/$1 "$HOME"/$1
 }
 
-install_ohmyzsh_plugins() {
-  echo "** installing oh-my-zsh plugins..."
-
-  [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ] \
-    && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
-  [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ] \
-    && git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-  [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-bat ] \
-    && git clone https://github.com/fdellwing/zsh-bat ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-bat
-}
-
 link_zsh() {
   echo "** linking zsh files..."
 
   linkit .zshrc
-  linkit .exports.zsh
-  linkit .aliases.zsh
-  linkit .paths.zsh
   linkit .hushlogin
   linkit .starship.toml
-
-  [ -f ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/random-emoji.zsh-theme ] && rm ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/random-emoji.zsh-theme
-  ln -s "$script_dir"/random-emoji.zsh-theme  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/random-emoji.zsh-theme
  }
 
 link_git() {
@@ -77,13 +55,11 @@ link_configs() {
   echo "** linking .npmrc and .tfswitch.toml"
 
   linkit .npmrc
-  linkit .tfswitch.toml
 }
 
 if [[ $# -eq 0 || ($# -eq 1 && $REMOVE_OLD == true ) ]]
   then
     link_zsh
-    install_ohmyzsh_plugins
     link_git
     link_configs
 fi
@@ -92,9 +68,7 @@ if [[ $GITCONFIG == true ]]; then
   link_git
 fi
 
-
 if [[ $REMOVE_OLD == true ]]; then
   echo "-x option was passed, removing old dotfiles..."
   rm -rf "$HOME"/.zzold*
-  rm -rf "$HOME"/.zcompdump-*
 fi
