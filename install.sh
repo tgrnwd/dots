@@ -21,7 +21,9 @@ done
 
 script_dir=$(dirname "$(readlink -f "$0")")
 
-linkit () {
+source "$script_dir/bootstrap-tools.sh" # Install starship and mise if missing
+
+linkit() {
   [ -f "$HOME"/$1 ] && mv "$HOME"/$1 "$HOME"/.zzold$1
   ln -sf "$script_dir"/$1 "$HOME"/$1
 }
@@ -32,7 +34,7 @@ link_zsh() {
   linkit .zshrc
   linkit .hushlogin
   linkit .starship.toml
- }
+}
 
 link_git() {
   echo "** linking git files..."
@@ -57,11 +59,10 @@ link_configs() {
   linkit .npmrc
 }
 
-if [[ $# -eq 0 || ($# -eq 1 && $REMOVE_OLD == true ) ]]
-  then
-    link_zsh
-    link_git
-    link_configs
+if [[ $# -eq 0 || ($# -eq 1 && $REMOVE_OLD == true) ]]; then
+  link_zsh
+  link_git
+  link_configs
 fi
 
 if [[ $GITCONFIG == true ]]; then
