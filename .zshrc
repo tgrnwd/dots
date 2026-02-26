@@ -64,5 +64,3 @@ eval "$(mise activate zsh)"
 # ── Source config files ─────────────────────────────────────────────────────
 source $DOTFILES_PATH/.aliases.zsh
 source $DOTFILES_PATH/.paths.zsh
-
-[[ -f $HOME/.zsh.local ]] && source $HOME/.zsh.local
