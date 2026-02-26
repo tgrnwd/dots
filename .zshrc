@@ -32,6 +32,9 @@ else
 fi
 autoload -U +X bashcompinit && bashcompinit
 
+# Case-insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
 # Tool completions (after compinit)
 type terraform &>/dev/null && complete -o nospace -C "$(which terraform)" terraform
 type fnm &>/dev/null && eval "$(fnm completions --shell zsh)"
