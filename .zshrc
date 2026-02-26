@@ -55,6 +55,7 @@ take() { mkdir -p "$1" && cd "$1" }
 type bat &>/dev/null && alias cat='bat --paging=never'
 
 # ── Starship prompt ─────────────────────────────────────────────────────────
+export STARSHIP_CONFIG="$DOTFILES_PATH/.starship.toml"
 eval "$(starship init zsh)"
 
 # ── Mise package manager ────────────────────────────────────────────────────

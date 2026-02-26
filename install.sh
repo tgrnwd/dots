@@ -24,16 +24,24 @@ script_dir=$(dirname "$(readlink -f "$0")")
 source "$script_dir/bootstrap-tools.sh" # Install starship and mise if missing
 
 linkit() {
-  [ -f "$HOME"/$1 ] && mv "$HOME"/$1 "$HOME"/.zzold$1
+  [ -f "$HOME"/$1 ] && [ ! -L "$HOME"/$1 ] && mv "$HOME"/$1 "$HOME"/.zzold$1
   ln -sf "$script_dir"/$1 "$HOME"/$1
 }
 
 link_zsh() {
-  echo "** linking zsh files..."
+  echo "** sourcing zsh config..."
 
-  linkit .zshrc
-  linkit .hushlogin
-  linkit .starship.toml
+  local source_line="source \"$script_dir/.zshrc\""
+  if ! grep -qF "$source_line" "$HOME/.zshrc" 2> /dev/null; then
+    local tmp
+    tmp=$(mktemp)
+    {
+      echo "$source_line"
+      [[ -f "$HOME/.zshrc" ]] && cat "$HOME/.zshrc"
+    } > "$tmp"
+    mv "$tmp" "$HOME/.zshrc"
+    echo "** added source line to ~/.zshrc"
+  fi
 }
 
 link_git() {
@@ -53,19 +61,12 @@ link_git() {
   git config --global user.name "$name"
 }
 
-link_configs() {
-  echo "** linking .npmrc and .tfswitch.toml"
-
-  linkit .npmrc
-}
-
-if [[ $# -eq 0 || ($# -eq 1 && $REMOVE_OLD == true) ]]; then
+if [[ $GITCONFIG != true ]]; then
+  [[ -f "$HOME/.hushlogin" ]] || touch "$HOME/.hushlogin"
   link_zsh
   link_git
-  link_configs
-fi
-
-if [[ $GITCONFIG == true ]]; then
+  linkit .npmrc
+else
   link_git
 fi
 

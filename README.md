@@ -24,7 +24,6 @@ Notes: `jq` already on system, Docker alias will override.
 
 1. [Install `brew`](https://brew.sh/)
 2. `brew install gh` and login
-3. `brew install starship`
 7. [Install Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation#installing-rancher-desktop-on-macos)
 
 #### Brew

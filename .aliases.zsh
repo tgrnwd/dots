@@ -9,6 +9,29 @@ dotfilesinstall () {
     $DOTFILES_PATH/install.sh "$@"
 }
 
+gh() {
+  command gh "$@"
+  local exit_code=$?
+  if [[ $exit_code -eq 0 && "$1" == "auth" && "$2" == "switch" ]]; then
+    local user_json name gh_email email
+    user_json="$(command gh api user)"
+    name="$(echo "$user_json" | jq -r '.name')"
+    gh_email="$(echo "$user_json" | jq -r '.email')"
+    if [[ "$gh_email" != "null" && -n "$gh_email" ]]; then
+      email="$gh_email"
+    else
+      local id login
+      id="$(echo "$user_json" | jq -r '.id')"
+      login="$(echo "$user_json" | jq -r '.login')"
+      email="${id}+${login}@users.noreply.github.com"
+    fi
+    echo "** updating git config for $name <$email>"
+    git config --global user.email "$email"
+    git config --global user.name "$name"
+  fi
+  return $exit_code
+}
+
 ghtoken() {
   if type gh &>/dev/null; then
     export GITHUB_TOKEN=$(gh auth token)
