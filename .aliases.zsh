@@ -28,6 +28,7 @@ gh() {
     echo "** updating git config for $name <$email>"
     git config --global user.email "$email"
     git config --global user.name "$name"
+    command gh auth setup-git
   fi
   return $exit_code
 }
