@@ -1,0 +1,115 @@
+install.sh
+  ccfa38616145ab9f 69,71-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.9",
+  "base_commit_sha": "528762c224d191282665b9f657cfcd2f22d246ae",
+  "prompts": {
+    "ccfa38616145ab9f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd08414-7e1a-4415-a2a9-fb7b77660403",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Tim Greenwood <tgreenwood@firstam.com>",
+      "messages": [
+        {
+          "type": "user",
+          "text": "to the install script, add a step to symlink the file at .config/ghostty/config to $HOME/ghostty/config.",
+          "timestamp": "2026-03-09T21:16:00.933Z"
+        },
+        {
+          "type": "assistant",
+          "text": "Let me read the install script and the ghostty config file.",
+          "timestamp": "2026-03-09T21:16:05.131Z"
+        },
+        {
+          "type": "tool_use",
+          "name": "Read",
+          "input": {
+            "file_path": "/Users/tgreenwood/codes/tgrnwd/dots/install.sh"
+          },
+          "timestamp": "2026-03-09T21:16:05.773Z"
+        },
+        {
+          "type": "tool_use",
+          "name": "Edit",
+          "input": {
+            "file_path": "/Users/tgreenwood/codes/tgrnwd/dots/install.sh",
+            "new_string": "  linkit .npmrc\n\n  echo \"** linking ghostty config...\"\n  mkdir -p \"$HOME/.config/ghostty\"\n  ln -sf \"$script_dir/.config/ghostty/config\" \"$HOME/.config/ghostty/config\"",
+            "old_string": "  linkit .npmrc",
+            "replace_all": false
+          },
+          "timestamp": "2026-03-09T21:16:09.232Z"
+        },
+        {
+          "type": "assistant",
+          "text": "Done. The install script now creates `~/.config/ghostty/` if needed and symlinks the Ghostty config into it. This runs in the non-git-only path alongside the other dotfile links.",
+          "timestamp": "2026-03-09T21:16:13.339Z"
+        },
+        {
+          "type": "user",
+          "text": "this is good, but add a block to check if it's mac or linux",
+          "timestamp": "2026-03-09T21:17:21.286Z"
+        },
+        {
+          "type": "assistant",
+          "text": "The user wants the ghostty config symlink to check the OS first. Let me re-read the file to see the current state.",
+          "timestamp": "2026-03-09T21:17:25.027Z"
+        },
+        {
+          "type": "tool_use",
+          "name": "Read",
+          "input": {
+            "file_path": "/Users/tgreenwood/codes/tgrnwd/dots/install.sh",
+            "limit": 15,
+            "offset": 68
+          },
+          "timestamp": "2026-03-09T21:17:25.721Z"
+        },
+        {
+          "type": "tool_use",
+          "name": "Edit",
+          "input": {
+            "file_path": "/Users/tgreenwood/codes/tgrnwd/dots/install.sh",
+            "new_string": "  echo \"** linking ghostty config...\"\n  if [[ \"$(uname)\" == \"Darwin\" ]]; then\n    mkdir -p \"$HOME/Library/Application Support/com.mitchellh.ghostty\"\n    ln -sf \"$script_dir/.config/ghostty/config\" \"$HOME/Library/Application Support/com.mitchellh.ghostty/config\"\n  else\n    mkdir -p \"$HOME/.config/ghostty\"\n    ln -sf \"$script_dir/.config/ghostty/config\" \"$HOME/.config/ghostty/config\"\n  fi",
+            "old_string": "  echo \"** linking ghostty config...\"\n  mkdir -p \"$HOME/.config/ghostty\"\n  ln -sf \"$script_dir/.config/ghostty/config\" \"$HOME/.config/ghostty/config\"",
+            "replace_all": false
+          },
+          "timestamp": "2026-03-09T21:17:31.656Z"
+        },
+        {
+          "type": "assistant",
+          "text": "Updated. On macOS it now symlinks to `~/Library/Application Support/com.mitchellh.ghostty/config` (Ghostty's default config location on Mac), and on Linux it uses `~/.config/ghostty/config`.",
+          "timestamp": "2026-03-09T21:17:35.556Z"
+        },
+        {
+          "type": "user",
+          "text": "no, it should use the $HOME location if it's mac or linux, and it shouldn't execute at all otherwise",
+          "timestamp": "2026-03-09T21:18:25.813Z"
+        },
+        {
+          "type": "tool_use",
+          "name": "Edit",
+          "input": {
+            "file_path": "/Users/tgreenwood/codes/tgrnwd/dots/install.sh",
+            "new_string": "  if [[ \"$(uname)\" == \"Darwin\" || \"$(uname)\" == \"Linux\" ]]; then\n    echo \"** linking ghostty config...\"\n    mkdir -p \"$HOME/.config/ghostty\"\n    ln -sf \"$script_dir/.config/ghostty/config\" \"$HOME/.config/ghostty/config\"\n  fi",
+            "old_string": "  echo \"** linking ghostty config...\"\n  if [[ \"$(uname)\" == \"Darwin\" ]]; then\n    mkdir -p \"$HOME/Library/Application Support/com.mitchellh.ghostty\"\n    ln -sf \"$script_dir/.config/ghostty/config\" \"$HOME/Library/Application Support/com.mitchellh.ghostty/config\"\n  else\n    mkdir -p \"$HOME/.config/ghostty\"\n    ln -sf \"$script_dir/.config/ghostty/config\" \"$HOME/.config/ghostty/config\"\n  fi",
+            "replace_all": false
+          },
+          "timestamp": "2026-03-09T21:18:30.890Z"
+        },
+        {
+          "type": "assistant",
+          "text": "Updated. It now only symlinks the Ghostty config on macOS or Linux, and skips it entirely on any other OS.",
+          "timestamp": "2026-03-09T21:18:34.114Z"
+        }
+      ],
+      "total_additions": 13,
+      "total_deletions": 7,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
