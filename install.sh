@@ -66,6 +66,13 @@ if [[ $GITCONFIG != true ]]; then
   link_zsh
   link_git
   linkit .npmrc
+
+  # Link Ghostty config
+  if [[ "$(uname)" == "Darwin" || "$(uname)" == "Linux" ]]; then
+    echo "** linking ghostty config..."
+    mkdir -p "$HOME/.config/ghostty"
+    ln -sf "$script_dir/.config/ghostty/config" "$HOME/.config/ghostty/config"
+  fi
 else
   link_git
 fi
