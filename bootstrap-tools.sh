@@ -25,7 +25,7 @@ _bootstrap_install_mise() {
 
 _bootstrap_install_colima_prereqs() {
   echo "bootstrap: installing colima and prerequisites..."
-  for pkg in colima docker kubectl jq; do
+  for pkg in colima docker kubectl jq gettext; do
     if ! command -v "$pkg" &> /dev/null; then
       echo "bootstrap: installing ${pkg}..."
       brew install "$pkg"

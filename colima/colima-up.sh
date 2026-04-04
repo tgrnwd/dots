@@ -38,6 +38,8 @@ need kubectl
 need openssl
 need jq
 need envsubst
+need curl
+need dig
 
 CERT_DIR="${HOME}/.local/share/colima-certs"
 CA_NAME="Colima Local Dev CA"
