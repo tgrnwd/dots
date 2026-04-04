@@ -1,0 +1,21 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    ports:
+      web:
+        port: 8000
+        exposedPort: 8080
+        redirections:
+          entryPoint:
+            to: websecure
+            scheme: https
+      websecure:
+        port: 8443
+        exposedPort: 8443
+    providers:
+      kubernetesGateway:
+        enabled: true

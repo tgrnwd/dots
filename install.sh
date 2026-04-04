@@ -77,6 +77,12 @@ else
   link_git
 fi
 
+# Bootstrap Colima k8s cluster (macOS only)
+if [[ "$(uname)" == "Darwin" ]] && command -v colima &>/dev/null; then
+  echo "** bootstrapping colima k8s cluster..."
+  "$script_dir/colima/colima-up.sh"
+fi
+
 if [[ $REMOVE_OLD == true ]]; then
   echo "-x option was passed, removing old dotfiles..."
   rm -rf "$HOME"/.zzold*

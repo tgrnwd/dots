@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>__HOMEBREW_PREFIX__/bin:__HOMEBREW_PREFIX__/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<true/>
+	</dict>
+	<key>Label</key>
+	<string>homebrew.mxcl.colima</string>
+	<key>LimitLoadToSessionType</key>
+	<array>
+		<string>Aqua</string>
+		<string>Background</string>
+		<string>LoginWindow</string>
+		<string>StandardIO</string>
+		<string>System</string>
+	</array>
+	<key>ProgramArguments</key>
+	<array>
+		<string>__HOMEBREW_PREFIX__/opt/colima/bin/colima</string>
+		<string>start</string>
+		<string>-f</string>
+		<string>--cpu</string>
+		<string>4</string>
+		<string>--memory</string>
+		<string>8</string>
+		<string>--kubernetes</string>
+		<string>--network-address</string>
+		<string>--port-forwarder</string>
+		<string>grpc</string>
+		<string>--k3s-arg=</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>__HOMEBREW_PREFIX__/var/log/colima.log</string>
+	<key>StandardOutPath</key>
+	<string>__HOMEBREW_PREFIX__/var/log/colima.log</string>
+	<key>WorkingDirectory</key>
+	<string>__HOME__</string>
+</dict>
+</plist>

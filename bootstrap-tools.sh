@@ -23,7 +23,20 @@ _bootstrap_install_mise() {
   fi
 }
 
+_bootstrap_install_colima_prereqs() {
+  echo "bootstrap: installing colima and prerequisites..."
+  for pkg in colima docker kubectl jq; do
+    if ! command -v "$pkg" &> /dev/null; then
+      echo "bootstrap: installing ${pkg}..."
+      brew install "$pkg"
+    fi
+  done
+}
+
 command -v starship &> /dev/null || _bootstrap_install_starship
 command -v mise &> /dev/null || _bootstrap_install_mise
+if [[ "$OSTYPE" == darwin* ]] && command -v brew &> /dev/null; then
+  _bootstrap_install_colima_prereqs
+fi
 
-unset -f _bootstrap_install_starship _bootstrap_install_mise
+unset -f _bootstrap_install_starship _bootstrap_install_mise _bootstrap_install_colima_prereqs

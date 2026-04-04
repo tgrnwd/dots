@@ -57,3 +57,81 @@ update_zsh_plugins() {
     git -C "$d" pull --ff-only
   done
 }
+
+tgdots() {
+  local cmd="${1:-help}"
+  local topic="${2:-}"
+
+  case "$cmd" in
+    help)
+      case "$topic" in
+        colima)
+          cat <<'COLIMA_HELP'
+Colima k8s Local Dev Cluster
+=============================
+
+The dotfiles bootstrap a Colima VM with k3s, Traefik (Gateway API),
+trusted TLS, and wildcard DNS for *.k8s.local.
+
+  Cluster info:
+    HTTPS port ......... 8443
+    HTTP port .......... 8080 (redirects to HTTPS)
+    TLD ................ k8s.local
+    URL pattern ........ https://<namespace>-<service>.k8s.local:8443
+    Gateway ............ local-gateway (namespace: default)
+    TLS secret ......... local-tls (namespace: default)
+
+  Manage:
+    colima status                    — check VM status
+    brew services info colima        — check launchd service
+    brew services restart colima     — restart the VM
+
+  Re-bootstrap (idempotent):
+    $DOTFILES_PATH/colima/colima-up.sh
+
+  Expose a service via HTTPRoute:
+
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: <service>
+      namespace: <namespace>
+    spec:
+      parentRefs:
+      - name: local-gateway
+        namespace: default
+        sectionName: https-wildcard
+      hostnames:
+      - <namespace>-<service>.k8s.local
+      rules:
+      - matches:
+        - path:
+            type: PathPrefix
+            value: /
+        backendRefs:
+        - name: <service>
+          port: <port>
+
+  That's it — the wildcard cert, DNS, and Gateway listener handle
+  TLS termination and routing automatically.
+COLIMA_HELP
+          ;;
+        *)
+          cat <<'HELP'
+tgdots — dotfiles helper
+
+Usage: tgdots help <topic>
+
+Topics:
+  colima    Colima k8s cluster setup, HTTPRoute examples, management commands
+HELP
+          ;;
+      esac
+      ;;
+    *)
+      echo "Unknown command: $cmd" >&2
+      echo "Run 'tgdots help' for usage." >&2
+      return 1
+      ;;
+  esac
+}
