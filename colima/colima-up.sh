@@ -22,8 +22,8 @@ set -euo pipefail
 #     Service/coredns-external       — NodePort exposing CoreDNS UDP on port 30053
 #
 #   Cluster (default):
-#     Secret/local-tls               — TLS cert for localhost + *.k8s.local
-#     Gateway/local-gateway          — HTTPS listeners (localhost + *.k8s.local)
+#     Secret/local-tls               — TLS cert for *.k8s.local
+#     Gateway/local-gateway          — HTTPS listener for *.k8s.local
 #     HTTPRoute/hello                — routes default-hello.k8s.local → hello:80
 #
 # Convention: services are reachable at <namespace>-<service>.k8s.local:8443
@@ -62,15 +62,9 @@ COLIMA_PLIST_ACTIVE="${HOME}/Library/LaunchAgents/homebrew.mxcl.colima.plist"
 log "Ensuring Colima is running with correct config"
 
 colima_running() {
-  local status
-  status="$(brew services info colima --json 2>/dev/null | jq -r '.[0].status')"
-  if [ "${status}" = "started" ]; then
-    log "Colima brew service is running"
-    return 0
-  else
-    log "Colima brew service is not running (status: ${status})"
-    return 1
-  fi
+  local brew_status
+  brew_status="$(brew services info colima --json 2>/dev/null | jq -r '.[0].status')"
+  [[ "${brew_status}" == "started" ]] && colima status --json >/dev/null 2>&1
 }
 
 plist_matches() {
@@ -125,28 +119,30 @@ fi
 
 # --- 4. Generate TLS cert signed by CA (regen if missing or domain changed) ---
 log "Ensuring TLS certificates exist"
-CERT_HAS_DOMAIN=false
-if [ -f "${CERT_DIR}/cert.pem" ]; then
-  openssl x509 -in "${CERT_DIR}/cert.pem" -noout -ext subjectAltName 2>/dev/null | grep -q "*.${LOCAL_DOMAIN}" && CERT_HAS_DOMAIN=true
+EXPECTED_SANS="DNS:*.${LOCAL_DOMAIN}, DNS:${LOCAL_DOMAIN}"
+CURRENT_SANS=""
+if [ -f "${CERT_DIR}/cert.pem" ] && [ -f "${CERT_DIR}/key.pem" ]; then
+  CURRENT_SANS="$(openssl x509 -in "${CERT_DIR}/cert.pem" -noout -ext subjectAltName 2>/dev/null | grep -oE 'DNS:[^,]+' | paste -sd', ' -)"
 fi
-if [ ! -f "${CERT_DIR}/cert.pem" ] || [ ! -f "${CERT_DIR}/key.pem" ] || [ "${CERT_HAS_DOMAIN}" = "false" ]; then
+if [ "${CURRENT_SANS}" = "${EXPECTED_SANS}" ]; then
+  log "Certs already exist with correct SANs"
+else
+  log "Regenerating certs (expected: ${EXPECTED_SANS}, got: ${CURRENT_SANS:-none})"
   openssl req -new -nodes \
     -keyout "${CERT_DIR}/key.pem" \
     -out "${CERT_DIR}/cert.csr" \
-    -subj "/CN=localhost" 2>/dev/null
+    -subj "/CN=*.${LOCAL_DOMAIN}" 2>/dev/null
 
   openssl x509 -req -days 825 \
     -in "${CERT_DIR}/cert.csr" \
     -CA "${CERT_DIR}/ca.pem" \
     -CAkey "${CERT_DIR}/ca-key.pem" \
     -CAcreateserial \
-    -extfile <(printf "subjectAltName=DNS:localhost,DNS:*.%s,DNS:%s,IP:127.0.0.1" "${LOCAL_DOMAIN}" "${LOCAL_DOMAIN}") \
+    -extfile <(printf "subjectAltName=DNS:*.%s,DNS:%s" "${LOCAL_DOMAIN}" "${LOCAL_DOMAIN}") \
     -out "${CERT_DIR}/cert.pem" 2>/dev/null
 
   rm -f "${CERT_DIR}/cert.csr" "${CERT_DIR}/ca.srl"
   log "Generated new certs in ${CERT_DIR}"
-else
-  log "Certs already exist in ${CERT_DIR}"
 fi
 
 # --- 5. CoreDNS wildcard DNS for *.k8s.local ---
@@ -207,9 +203,10 @@ else
 fi
 
 log "Verifying HTTPS"
-HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' https://localhost:8443 2>/dev/null || echo "000")
-if [ "${HTTP_CODE}" = "200" ] || [ "${HTTP_CODE}" = "404" ]; then
-  log "Trusted HTTPS working on https://localhost:8443 (HTTP ${HTTP_CODE})"
+VERIFY_HOST="test.${LOCAL_DOMAIN}"
+HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --resolve "${VERIFY_HOST}:8443:127.0.0.1" "https://${VERIFY_HOST}:8443" 2>/dev/null || echo "000")
+if [ "${HTTP_CODE}" = "404" ]; then
+  log "Trusted HTTPS working on *.${LOCAL_DOMAIN}:8443 (Traefik responded with 404 — no routes yet)"
 else
   log "Warning: got HTTP ${HTTP_CODE} — Traefik may still be restarting, try again in a few seconds"
 fi

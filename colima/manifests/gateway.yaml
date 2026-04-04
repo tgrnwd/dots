@@ -6,17 +6,6 @@ metadata:
 spec:
   gatewayClassName: traefik
   listeners:
-  - name: https-localhost
-    protocol: HTTPS
-    port: 8443
-    hostname: localhost
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - name: local-tls
-    allowedRoutes:
-      namespaces:
-        from: Same
   - name: https-wildcard
     protocol: HTTPS
     port: 8443

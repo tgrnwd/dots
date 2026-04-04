@@ -72,8 +72,8 @@ browser -> https://<ns>-<svc>.k8s.local:8443
 - `Service/coredns-external` — NodePort exposing CoreDNS UDP on 30053
 
 **Cluster (default):**
-- `Secret/local-tls` — TLS cert for localhost + `*.k8s.local`
-- `Gateway/local-gateway` — HTTPS listeners (localhost + `*.k8s.local`)
+- `Secret/local-tls` — TLS cert for `*.k8s.local`
+- `Gateway/local-gateway` — HTTPS listener for `*.k8s.local`
 
 ## Key Constraints
 
