@@ -59,7 +59,7 @@ _bootstrap_configure_mise_completions_hook() {
   fi
 
   mise config set -f "$config" hooks.postinstall --type string \
-    "mise exec github:alltuner/mise-completions-sync -- mise-completions-sync --shell zsh || true"
+    "mise exec github:alltuner/mise-completions-sync -- mise-completions-sync --shell zsh"
 }
 
 _bootstrap_sync_mise_completions() {
