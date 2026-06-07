@@ -50,7 +50,7 @@ _bootstrap_configure_mise_completions_hook() {
 
   local hook
   hook="$(mise config get -f "$config" hooks.postinstall 2>/dev/null || true)"
-  [[ "$hook" == *mise-completions-sync* ]] && return
+  [[ "$hook" == *"mise exec"*"mise-completions-sync"* ]] && return
 
   if [[ -n "$hook" ]]; then
     echo "bootstrap: existing mise hooks.postinstall found; not overwriting"
