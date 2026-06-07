@@ -44,6 +44,8 @@ _bootstrap_configure_mise_completions_hook() {
 
   command -v mise &> /dev/null || return
 
+  mise settings experimental=true
+
   config="${MISE_GLOBAL_CONFIG_FILE:-$HOME/.config/mise/config.toml}"
   mkdir -p "$(dirname "$config")"
   [[ -f "$config" ]] || touch "$config"
