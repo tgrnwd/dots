@@ -39,6 +39,29 @@ _bootstrap_install_mise_completions_sync() {
   fi
 }
 
+_bootstrap_configure_mise_completions_hook() {
+  command -v mise &> /dev/null || return
+
+  mise settings experimental=true
+
+  local config="${MISE_GLOBAL_CONFIG_FILE:-$HOME/.config/mise/config.toml}"
+  mkdir -p "$(dirname "$config")"
+  [[ -f "$config" ]] || touch "$config"
+
+  local hook
+  hook="$(mise config get -f "$config" hooks.postinstall 2>/dev/null || true)"
+  [[ "$hook" == *mise-completions-sync* ]] && return
+
+  if [[ -n "$hook" ]]; then
+    echo "bootstrap: existing mise hooks.postinstall found; not overwriting"
+    echo "bootstrap: manually add: mise exec github:alltuner/mise-completions-sync -- mise-completions-sync --shell zsh || true"
+    return
+  fi
+
+  mise config set -f "$config" hooks.postinstall --type string \
+    "mise exec github:alltuner/mise-completions-sync -- mise-completions-sync --shell zsh || true"
+}
+
 _bootstrap_sync_mise_completions() {
   command -v mise &> /dev/null || return
 
@@ -69,10 +92,12 @@ command -v starship &> /dev/null || _bootstrap_install_starship
 command -v mise &> /dev/null || _bootstrap_install_mise
 _bootstrap_install_mise_tools
 command -v mise-completions-sync &> /dev/null || _bootstrap_install_mise_completions_sync
+_bootstrap_configure_mise_completions_hook
 _bootstrap_sync_mise_completions
 
 unset -f _bootstrap_install_starship \
   _bootstrap_install_mise \
   _bootstrap_install_mise_tools \
   _bootstrap_install_mise_completions_sync \
+  _bootstrap_configure_mise_completions_hook \
   _bootstrap_sync_mise_completions
