@@ -52,14 +52,8 @@ _bootstrap_configure_mise_completions_hook() {
   hook="$(mise config get -f "$config" hooks.postinstall 2>/dev/null || true)"
   [[ "$hook" == *"mise exec"*"misecompsync"* ]] && return
 
-  if [[ -n "$hook" ]]; then
-    echo "bootstrap: existing mise hooks.postinstall found; not overwriting"
-    echo "bootstrap: manually add: mise exec github:alltuner/mise-completions-sync -- misecompsync --shell zsh || true"
-    return
-  fi
-
   mise config set -f "$config" hooks.postinstall --type string \
-    "mise exec github:alltuner/mise-completions-sync -- misecompsync --shell zsh || true"
+    "mise exec github:alltuner/mise-completions-sync -- misecompsync --shell zsh"
 }
 
 _bootstrap_sync_mise_completions() {
