@@ -24,7 +24,7 @@ _bootstrap_install_mise() {
 }
 
 _bootstrap_install_mise_completions_sync() {
-  command -v mise-completions-sync &> /dev/null && return
+  command -v misecompsync &> /dev/null && return
 
   echo "bootstrap: installing mise-completions-sync..."
   if command -v mise &> /dev/null; then
@@ -50,26 +50,26 @@ _bootstrap_configure_mise_completions_hook() {
 
   local hook
   hook="$(mise config get -f "$config" hooks.postinstall 2>/dev/null || true)"
-  [[ "$hook" == *"mise exec"*"mise-completions-sync"* ]] && return
+  [[ "$hook" == *"mise exec"*"misecompsync"* ]] && return
 
   if [[ -n "$hook" ]]; then
     echo "bootstrap: existing mise hooks.postinstall found; not overwriting"
-    echo "bootstrap: manually add: mise exec github:alltuner/mise-completions-sync -- mise-completions-sync --shell zsh || true"
+    echo "bootstrap: manually add: mise exec github:alltuner/mise-completions-sync -- misecompsync --shell zsh || true"
     return
   fi
 
   mise config set -f "$config" hooks.postinstall --type string \
-    "mise exec github:alltuner/mise-completions-sync -- mise-completions-sync --shell zsh"
+    "mise exec github:alltuner/mise-completions-sync -- misecompsync --shell zsh || true"
 }
 
 _bootstrap_sync_mise_completions() {
   command -v mise &> /dev/null || return
 
   echo "bootstrap: syncing mise-managed tool completions..."
-  if command -v mise-completions-sync &> /dev/null; then
-    mise-completions-sync --shell zsh
+  if command -v misecompsync &> /dev/null; then
+    misecompsync --shell zsh
   else
-    mise exec github:alltuner/mise-completions-sync -- mise-completions-sync --shell zsh
+    mise exec github:alltuner/mise-completions-sync -- misecompsync --shell zsh
   fi
 }
 
@@ -91,7 +91,7 @@ command -v gettext &> /dev/null || brew install gettext
 command -v starship &> /dev/null || _bootstrap_install_starship
 command -v mise &> /dev/null || _bootstrap_install_mise
 _bootstrap_install_mise_tools
-command -v mise-completions-sync &> /dev/null || _bootstrap_install_mise_completions_sync
+command -v misecompsync &> /dev/null || _bootstrap_install_mise_completions_sync
 _bootstrap_configure_mise_completions_hook
 _bootstrap_sync_mise_completions
 
