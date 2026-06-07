@@ -1,22 +1,13 @@
 #!/bin/bash
 
-while getopts "gnx" opt; do
-  case $opt in
-    g)
-      GITCONFIG=true
-      ;;
-    x)
-      REMOVE_OLD=true
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -g)     GITCONFIG=true ;;
+    -x)     REMOVE_OLD=true ;;
+    --k8s)  K8S=true ;;
+    *)      echo "Invalid option: $1" >&2; exit 1 ;;
   esac
+  shift
 done
 
 script_dir=$(dirname "$(readlink -f "$0")")
@@ -44,6 +35,22 @@ link_zsh() {
   fi
 }
 
+link_zlogin() {
+  echo "** sourcing zshenv config..."
+
+  local source_line="source \"$script_dir/.zlogin\""
+  if ! grep -qF "$source_line" "$HOME/.zlogin" 2> /dev/null; then
+    local tmp
+    tmp=$(mktemp)
+    {
+      echo "$source_line"
+      [[ -f "$HOME/.zlogin" ]] && cat "$HOME/.zlogin"
+    } > "$tmp"
+    mv "$tmp" "$HOME/.zlogin"
+    echo "** added source line to ~/.zlogin"
+  fi
+}
+
 link_git() {
   echo "** linking git files..."
 
@@ -64,6 +71,7 @@ link_git() {
 if [[ $GITCONFIG != true ]]; then
   [[ -f "$HOME/.hushlogin" ]] || touch "$HOME/.hushlogin"
   link_zsh
+  link_zlogin
   link_git
   linkit .npmrc
 
@@ -77,8 +85,9 @@ else
   link_git
 fi
 
-# Bootstrap Colima k8s cluster (macOS only)
-if [[ "$(uname)" == "Darwin" ]] && command -v colima &>/dev/null; then
+if [[ $K8S == true ]]; then
+  echo "** installing k8s prerequisites..."
+  command -v colima &>/dev/null || brew install colima
   echo "** bootstrapping colima k8s cluster..."
   "$script_dir/colima/colima-up.sh"
 fi

@@ -2,6 +2,7 @@ alias c="clear"
 alias ls="ls --color"
 alias grep='grep --color=auto'
 alias get="curl -O -L" # Download file and save it with filename of remote file
+alias ck8s="colima start --cpu 4 --memory 8 --kubernetes --network-address --port-forwarder grpc --k3s-arg=''"
 alias dotfiles="cd $DOTFILES"
 alias dev="cd $HOME/codes"
 
@@ -43,13 +44,6 @@ ghtoken() {
   fi
 }
 
-yq() {
-  docker run --rm -i -v "${PWD}":/workdir mikefarah/yq "$@"
-}
-
-jq() {
-  docker run -i --rm -v "$PWD:$PWD" -w "$PWD" ghcr.io/jqlang/jq:latest "$@"
-}
 
 update_zsh_plugins() {
   for d in "$ZSH_PLUGIN_DIR"/*/; do

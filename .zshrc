@@ -19,25 +19,36 @@ fi
 
 # ── Completion system ───────────────────────────────────────────────────────
 # Add plugin completions and brew completions to fpath BEFORE compinit
-fpath=("$ZSH_PLUGIN_DIR/zsh-completions/src" $fpath)
-if type brew &>/dev/null; then
-  fpath=("$(brew --prefix)/share/zsh/site-functions" $fpath)
-fi
+typeset -U fpath path
+fpath=("${XDG_DATA_HOME:-$HOME/.local/share}/mise-completions/zsh" "$ZSH_PLUGIN_DIR/zsh-completions/src" $fpath)
+[[ -n "${HOMEBREW_PREFIX:-}" && -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]] &&
+  fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
 
 autoload -Uz compinit
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit -d "${ZDOTDIR:-$HOME}/.zcompdump"
+_zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+_zcompdump_stale() {
+  local dir
+
+  [[ ! -s "$_zcompdump" ]] && return 0
+
+  for dir in $fpath; do
+    [[ -d "$dir" && "$dir" -nt "$_zcompdump" ]] && return 0
+  done
+
+  return 1
+}
+
+if _zcompdump_stale; then
+  compinit -u -d "$_zcompdump"
 else
-  compinit -C -d "${ZDOTDIR:-$HOME}/.zcompdump"
+  compinit -u -C -d "$_zcompdump"
 fi
+unfunction _zcompdump_stale
+unset _zcompdump
 autoload -U +X bashcompinit && bashcompinit
 
 # Case-insensitive completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-# Tool completions (after compinit)
-type terraform &>/dev/null && complete -o nospace -C "$(which terraform)" terraform
-type fnm &>/dev/null && eval "$(fnm completions --shell zsh)"
 
 # ── Plugins ─────────────────────────────────────────────────────────────────
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
@@ -60,9 +71,9 @@ type bat &>/dev/null && alias cat='bat --paging=never'
 # ── Starship prompt ─────────────────────────────────────────────────────────
 export STARSHIP_CONFIG="$DOTFILES_PATH/.starship.toml"
 eval "$(starship init zsh)"
+RPROMPT=''
 
-# ── Mise package manager ────────────────────────────────────────────────────
-eval "$(mise activate zsh)"
+
 
 # ── Source config files ─────────────────────────────────────────────────────
 source $DOTFILES_PATH/.aliases.zsh
