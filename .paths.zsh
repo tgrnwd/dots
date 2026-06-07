@@ -6,8 +6,8 @@ pathadd() {
 
 pathadd $HOME/.local/bin
 pathadd $HOME/.dotnet/tools
-pathadd $HOME/.rd/bin # rancher desktop
 pathadd $HOME/.git-ai/bin # git-ai
 
-export GOROOT="$HOME/.go"
-[ ! -d "$GOROOT" ] && mkdir -p "$GOROOT"
+# Colima Docker socket (macOS only)
+[[ "$(uname)" == "Darwin" && -S "${HOME}/.colima/default/docker.sock" ]] &&
+    export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"
